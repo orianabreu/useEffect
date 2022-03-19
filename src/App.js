@@ -1,23 +1,43 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useEffect } from "react";
+import ApiRequest from "./components/ApiRequest/ApiRequest";
+import Time from "./components/Time/Time";
+
+//efectos secundarios: peticiones a APIs (HttpRequests), setIntervals-setTimeOuts...
 
 function App() {
+  const [count, setCount] = useState(0);
+  const [inputValue, setInputValue] = useState("");
+
+  useEffect(() => {
+    console.log("renderizado...");
+    document.title = `Total de clicks:${count}`;
+  }, [count]) // la función solo se ejecuta cuando cambie count
+
+  // useEffect(() => {
+  //   console.log("renderizado...");
+  //   document.title = `Total de clicks:${count}`;
+  // }) // si no añado array de dependcias, la función se ejecuta cada vez que se actualice el componente
+
+  // useEffect(() => {
+  //   console.log("renderizado...");
+  //   document.title = `Total de clicks:${count}`;
+  // }, []) // si dejo el array de dependencias vacío, la función del useEffect se ejecuta solo la primera vez que se monta el componente
+
+  const handleClick = () => {
+    setCount(count + 1);
+  }
+  const handleChange = (e) => {
+    setInputValue(e.target.value);
+  }
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1>{count}</h1>
+      <button onClick={handleClick}>+</button>
+      <input value={inputValue} onChange={handleChange}/>
+
+      <Time />
+      <ApiRequest />
     </div>
   );
 }
