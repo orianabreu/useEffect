@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import ApiRequest from "./components/ApiRequest/ApiRequest";
 import Time from "./components/Time/Time";
 
@@ -7,10 +7,17 @@ import Time from "./components/Time/Time";
 function App() {
   const [count, setCount] = useState(0);
   const [inputValue, setInputValue] = useState("");
+  //const [renderCount, setRenderCount] = useState(0);
+  const renderCount = useRef(1);
+  console.log(renderCount);
 
+  const inputFocus = useRef();
+  
   useEffect(() => {
     console.log("renderizado...");
     document.title = `Total de clicks:${count}`;
+    //setRenderCount(prevRenderCount => prevRenderCount + 1) puede generar bucles infinitos
+    renderCount.current = renderCount.current + 1;
   }, [count]) // la función solo se ejecuta cuando cambie count
 
   // useEffect(() => {
@@ -30,12 +37,19 @@ function App() {
     setInputValue(e.target.value);
   }
 
+  const focus = () => {
+    console.log("focus...");
+    inputFocus.current.focus();
+  }
+
   return (
     <div className="App">
       <h1>{count}</h1>
       <button onClick={handleClick}>+</button>
-      <input value={inputValue} onChange={handleChange}/>
-
+      <hr />
+      <input ref={inputFocus} value={inputValue} onChange={handleChange}/>
+      <button onClick={focus}>focus</button>
+      <p>Componente renderizado: {renderCount.current} veces</p>
       <Time />
       <ApiRequest />
     </div>
